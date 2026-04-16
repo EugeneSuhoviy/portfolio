@@ -43,6 +43,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
       opacity: 0.022; pointer-events: none; z-index: 9999;
     }
+
     /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -282,26 +283,7 @@
       margin-bottom: 10px;
     }
 
-    /* More projects compact list */
-    .more-projects {
-      margin-top: 2px; background: var(--bg-2); border-radius: 0 0 12px 12px;
-      padding: 28px 32px;
-    }
-    .more-label {
-      font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--text-3); margin-bottom: 16px;
-    }
-    .more-list {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .more-item {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--text-2); text-decoration: none;
-      padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
-      background: var(--bg-3); transition: color 0.2s, border-color 0.2s;
-    }
-    .more-item:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
-    .more-item svg { flex-shrink: 0; }
+
 
     /* EXPERIENCE */
     #experience .exp-list { margin-top: 56px; }
@@ -379,6 +361,68 @@
       .exp-item { grid-template-columns: 1fr; gap: 16px; }
       footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px 20px; }
     }
+
+    /* Accordion more projects */
+    .acc-wrap {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .acc-wrap.open { max-height: 800px; }
+    .acc-grid {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:2px; margin-top:2px;
+    }
+    .acc-card {
+      background:#0e1219; padding:20px 22px;
+      display:flex; flex-direction:column; gap:8px;
+      transition: background .2s, opacity .35s ease, transform .35s ease;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .acc-wrap.open .acc-card { opacity: 1; transform: translateY(0); }
+    .acc-wrap.open .acc-card:nth-child(1) { transition-delay: 0.05s; }
+    .acc-wrap.open .acc-card:nth-child(2) { transition-delay: 0.10s; }
+    .acc-wrap.open .acc-card:nth-child(3) { transition-delay: 0.15s; }
+    .acc-wrap.open .acc-card:nth-child(4) { transition-delay: 0.20s; }
+    .acc-wrap.open .acc-card:nth-child(5) { transition-delay: 0.25s; }
+    .acc-wrap.open .acc-card:nth-child(6) { transition-delay: 0.30s; }
+    .acc-wrap.open .acc-card:nth-child(7) { transition-delay: 0.35s; }
+    .acc-wrap.open .acc-card:nth-child(8) { transition-delay: 0.40s; }
+    .acc-card:hover { background:#141920; }
+    .acc-card-name { font-size:13px; font-weight:500; color:#e8eaf0; }
+    .acc-card-stack {
+      font-family:'DM Mono',monospace; font-size:10px; padding:3px 9px;
+      border-radius:4px; background:#080b10; border:1px solid rgba(255,255,255,0.07);
+      color:#4a5164; width:fit-content; letter-spacing:.03em;
+    }
+    .acc-card-link {
+      font-size:11px; color:#4f8ef7; text-decoration:none;
+      display:flex; align-items:center; gap:4px; margin-top:2px;
+      transition:opacity .2s;
+    }
+    .acc-card-link:hover { opacity:.7; }
+    .acc-toggle {
+      display:flex; align-items:center; gap:10px;
+      font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.06em;
+      text-transform:uppercase; color:#4a5164;
+      background:#0e1219; border:none; cursor:pointer;
+      padding:16px 22px; width:100%; text-align:left;
+      transition: color .2s, background .2s;
+      border-radius:0 0 12px 12px;
+      margin-top:2px;
+    }
+    .acc-toggle:hover { color:#e8eaf0; background:#141920; }
+    .acc-toggle-icon {
+      width:16px; height:16px; border-radius:50%;
+      border:1px solid currentColor;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:14px; line-height:1; flex-shrink:0;
+      transition: transform .4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .acc-toggle.open .acc-toggle-icon { transform: rotate(45deg); }
+    @media(max-width:1024px) { .acc-grid { grid-template-columns:repeat(3,1fr); } }
+    @media(max-width:768px)  { .acc-grid { grid-template-columns:repeat(2,1fr); } }
   </style>
 </head>
 <body>
@@ -609,16 +653,24 @@
           </div>
         </div>
       </div>
-      <div class="more-projects">
-        <div class="more-label">Also worked on</div>
-        <div class="more-list">
-          <a href="https://www.asics.com/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            ASICS
-          </a>
-          <span class="more-item" style="cursor:default">Internal Resource Management Tool</span>
-        </div>
-      </div>
+      <div class="acc-wrap" id="react-more"><div class="acc-grid">
+          <div class="acc-card">
+            <div class="acc-card-name">ASICS</div>
+            <div class="acc-card-stack">React · Next.js</div>
+            <a href="https://www.asics.com/" target="_blank" class="acc-card-link">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+              asics.com
+            </a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Internal Resource Tool</div>
+            <div class="acc-card-stack">Vue.js</div>
+          </div>
+        </div></div>
+      <button class="acc-toggle" id="btn-react-more" onclick="accToggle('react-more','btn-react-more','+2 more projects')">
+        <span class="acc-toggle-icon">+</span>
+        <span class="acc-toggle-label">+2 more projects</span>
+      </button>
     </div>
 
     <!-- Magento 2 -->
@@ -681,43 +733,52 @@
           </div>
         </div>
       </div>
-      <div class="more-projects">
-        <div class="more-label">Also worked on</div>
-        <div class="more-list">
-          <a href="https://www.sistemaplastics.com/au" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Sistema Plastics
-          </a>
-          <a href="https://www.sunbeam.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Sunbeam
-          </a>
-          <a href="https://www.signet.net.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Signet
-          </a>
-          <a href="https://shop.stihl.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Stihl
-          </a>
-          <a href="https://www.beaconlighting.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Beacon Lighting
-          </a>
-          <a href="https://www.barkersonline.co.nz/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Barkers
-          </a>
-          <a href="https://www.animates.co.nz/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Animates
-          </a>
-          <a href="https://thewhiskyclub.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            The Whisky Club
-          </a>
-        </div>
-      </div>
+      <div class="acc-wrap" id="m2-more"><div class="acc-grid">
+          <div class="acc-card">
+            <div class="acc-card-name">Sistema Plastics</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.sistemaplastics.com/au" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>sistemaplastics.com</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Sunbeam</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.sunbeam.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>sunbeam.com.au</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Signet</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.signet.net.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>signet.net.au</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Stihl</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://shop.stihl.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>shop.stihl.com.au</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Beacon Lighting</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.beaconlighting.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>beaconlighting.com.au</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Barkers</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.barkersonline.co.nz/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>barkersonline.co.nz</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Animates</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://www.animates.co.nz/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>animates.co.nz</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">The Whisky Club</div>
+            <div class="acc-card-stack">Magento 2</div>
+            <a href="https://thewhiskyclub.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>thewhiskyclub.com.au</a>
+          </div>
+        </div></div>
+      <button class="acc-toggle" id="btn-m2-more" onclick="accToggle('m2-more','btn-m2-more','+8 more projects')">
+        <span class="acc-toggle-icon">+</span>
+        <span class="acc-toggle-label">+8 more projects</span>
+      </button>
     </div>
 
     <!-- Shopify -->
@@ -787,23 +848,27 @@
           </div>
         </div>
       </div>
-      <div class="more-projects">
-        <div class="more-label">Also worked on</div>
-        <div class="more-list">
-          <a href="https://allyfashion.com/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Ally Fashion
-          </a>
-          <a href="https://www.bendonlingerie.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Bendon Lingerie
-          </a>
-          <a href="https://www.camerapro.com.au/" target="_blank" class="more-item">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            Camera Pro
-          </a>
-        </div>
-      </div>
+      <div class="acc-wrap" id="shopify-more"><div class="acc-grid">
+          <div class="acc-card">
+            <div class="acc-card-name">Ally Fashion</div>
+            <div class="acc-card-stack">Shopify · Liquid</div>
+            <a href="https://allyfashion.com/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>allyfashion.com</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Bendon Lingerie</div>
+            <div class="acc-card-stack">Shopify · Liquid</div>
+            <a href="https://www.bendonlingerie.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>bendonlingerie.com.au</a>
+          </div>
+          <div class="acc-card">
+            <div class="acc-card-name">Camera Pro</div>
+            <div class="acc-card-stack">Shopify · Liquid</div>
+            <a href="https://www.camerapro.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>camerapro.com.au</a>
+          </div>
+        </div></div>
+      <button class="acc-toggle" id="btn-shopify-more" onclick="accToggle('shopify-more','btn-shopify-more','+3 more projects')">
+        <span class="acc-toggle-icon">+</span>
+        <span class="acc-toggle-label">+3 more projects</span>
+      </button>
     </div>
 
     <!-- Vue / Nuxt -->
@@ -994,483 +1059,14 @@
       }
     });
   });
+
+  function accToggle(moreId, btnId, label) {
+    var wrap = document.getElementById(moreId);
+    var btn  = document.getElementById(btnId);
+    var isOpen = wrap.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.querySelector('.acc-toggle-label').textContent = isOpen ? 'Show less' : label;
+  }
 </script>
-
-<div style="height:1px; background:rgba(255,255,255,0.07)"></div>
-
-<!-- ══════════════════════════════════════════════
-     DEMO SECTION — variants for "Also worked on"
-     ══════════════════════════════════════════════ -->
-<section style="padding: 80px 0; background: #050709;">
-  <div style="max-width:1080px; margin:0 auto; padding:0 40px;">
-
-    <div style="margin-bottom:64px; padding-bottom:32px; border-bottom:1px solid rgba(255,255,255,0.07)">
-      <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#4f8ef7; margin-bottom:10px">Preview only</div>
-      <div style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:#e8eaf0; margin-bottom:8px">4 варіанти "Also worked on"</div>
-      <div style="font-size:14px; color:#4a5164;">Дивись і вибирай — яка подобається більше?</div>
-    </div>
-
-    <!-- ─── VARIANT 1: Brand marquee / typography grid ─── -->
-    <div style="margin-bottom:72px">
-      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#4f8ef7; margin-bottom:6px">Варіант 1</div>
-      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#e8eaf0; margin-bottom:4px">Brand ticker — типографіка рядком</div>
-      <div style="font-size:13px; color:#4a5164; margin-bottom:28px">Як "наші клієнти" на агентських сайтах. Два рядки що біжать в різні сторони.</div>
-
-      <div style="overflow:hidden; padding: 28px 0; border-top:1px solid rgba(255,255,255,0.07); border-bottom:1px solid rgba(255,255,255,0.07)">
-        <style>
-          @keyframes marquee-left  { from { transform: translateX(0) } to { transform: translateX(-50%) } }
-          @keyframes marquee-right { from { transform: translateX(-50%) } to { transform: translateX(0) } }
-          .mq-track-l { display:flex; width:max-content; animation: marquee-left 28s linear infinite; gap:0; }
-          .mq-track-r { display:flex; width:max-content; animation: marquee-right 32s linear infinite; gap:0; margin-top:16px; }
-          .mq-item {
-            font-family:'Syne',sans-serif; font-size:15px; font-weight:600;
-            letter-spacing:.06em; text-transform:uppercase;
-            color:#4a5164; padding: 0 32px;
-            transition: color .2s; white-space:nowrap; cursor:default;
-            display:flex; align-items:center; gap:32px;
-          }
-          .mq-item:hover { color:#e8eaf0; }
-          .mq-dot { width:4px; height:4px; border-radius:50%; background:#4f8ef7; flex-shrink:0; }
-        </style>
-        <div class="mq-track-l">
-          <span class="mq-item">Petbarn<span class="mq-dot"></span></span>
-          <span class="mq-item">Blundstone<span class="mq-dot"></span></span>
-          <span class="mq-item">Scotch & Soda<span class="mq-dot"></span></span>
-          <span class="mq-item">ASICS<span class="mq-dot"></span></span>
-          <span class="mq-item">Stihl<span class="mq-dot"></span></span>
-          <span class="mq-item">Beacon Lighting<span class="mq-dot"></span></span>
-          <span class="mq-item">Nine West<span class="mq-dot"></span></span>
-          <span class="mq-item">Barkers<span class="mq-dot"></span></span>
-          <!-- duplicate for seamless loop -->
-          <span class="mq-item">Petbarn<span class="mq-dot"></span></span>
-          <span class="mq-item">Blundstone<span class="mq-dot"></span></span>
-          <span class="mq-item">Scotch & Soda<span class="mq-dot"></span></span>
-          <span class="mq-item">ASICS<span class="mq-dot"></span></span>
-          <span class="mq-item">Stihl<span class="mq-dot"></span></span>
-          <span class="mq-item">Beacon Lighting<span class="mq-dot"></span></span>
-          <span class="mq-item">Nine West<span class="mq-dot"></span></span>
-          <span class="mq-item">Barkers<span class="mq-dot"></span></span>
-        </div>
-        <div class="mq-track-r">
-          <span class="mq-item">Signet<span class="mq-dot"></span></span>
-          <span class="mq-item">Sistema Plastics<span class="mq-dot"></span></span>
-          <span class="mq-item">Sunbeam<span class="mq-dot"></span></span>
-          <span class="mq-item">Animates<span class="mq-dot"></span></span>
-          <span class="mq-item">Generate Wealth<span class="mq-dot"></span></span>
-          <span class="mq-item">The Whisky Club<span class="mq-dot"></span></span>
-          <span class="mq-item">GlobeWest<span class="mq-dot"></span></span>
-          <span class="mq-item">Ally Fashion<span class="mq-dot"></span></span>
-          <!-- duplicate -->
-          <span class="mq-item">Signet<span class="mq-dot"></span></span>
-          <span class="mq-item">Sistema Plastics<span class="mq-dot"></span></span>
-          <span class="mq-item">Sunbeam<span class="mq-dot"></span></span>
-          <span class="mq-item">Animates<span class="mq-dot"></span></span>
-          <span class="mq-item">Generate Wealth<span class="mq-dot"></span></span>
-          <span class="mq-item">The Whisky Club<span class="mq-dot"></span></span>
-          <span class="mq-item">GlobeWest<span class="mq-dot"></span></span>
-          <span class="mq-item">Ally Fashion<span class="mq-dot"></span></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ─── VARIANT 2: Accordion ─── -->
-    <div style="margin-bottom:72px">
-      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#4f8ef7; margin-bottom:6px">Варіант 2</div>
-      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#e8eaf0; margin-bottom:4px">Accordion — "Show more"</div>
-      <div style="font-size:13px; color:#4a5164; margin-bottom:28px">Компактні картки з'являються при кліку. Не захаращує, але все є.</div>
-
-      <style>
-        .acc-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-top:16px; }
-        .acc-card {
-          background:#0e1219; padding:18px 20px; border-radius:0;
-          display:flex; flex-direction:column; gap:8px;
-          transition: background .2s;
-        }
-        .acc-card:first-child { border-radius:8px 0 0 0; }
-        .acc-card:nth-child(4) { border-radius:0 8px 0 0; }
-        .acc-card:nth-last-child(1) { border-radius:0 0 8px 0; }
-        .acc-card:nth-last-child(4) { border-radius:0 0 0 8px; }
-        .acc-card:hover { background:#141920; }
-        .acc-card-name { font-size:13px; font-weight:500; color:#e8eaf0; }
-        .acc-card-tag {
-          font-family:'DM Mono',monospace; font-size:10px; padding:2px 8px;
-          border-radius:4px; background:#080b10; border:1px solid rgba(255,255,255,0.07);
-          color:#4a5164; width:fit-content;
-        }
-        .acc-card-link { font-size:11px; color:#4f8ef7; text-decoration:none; display:flex; align-items:center; gap:4px; margin-top:2px; }
-        .acc-card-link:hover { opacity:.75; }
-        #acc-more { display:none; }
-        #acc-more.open { display:contents; }
-        .acc-toggle-btn {
-          display:flex; align-items:center; gap:10px; margin-top:2px;
-          font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.06em;
-          color:#4a5164; background:none; border:none; cursor:pointer;
-          padding:16px 20px; border-radius:0 0 8px 8px;
-          background:#0e1219; width:100%; transition:color .2s, background .2s;
-          text-transform:uppercase;
-        }
-        .acc-toggle-btn:hover { color:#e8eaf0; background:#141920; }
-        .acc-toggle-icon { width:16px; height:16px; border-radius:50%; border:1px solid currentColor; display:inline-flex; align-items:center; justify-content:center; font-size:13px; line-height:1; flex-shrink:0; transition:transform .3s; }
-        .acc-toggle-btn.open .acc-toggle-icon { transform:rotate(45deg); }
-      </style>
-
-      <div style="margin-top:0">
-        <div class="acc-cards">
-          <div class="acc-card">
-            <div class="acc-card-name">Stihl</div>
-            <div class="acc-card-tag">Magento 2</div>
-            <a href="https://shop.stihl.com.au/" target="_blank" class="acc-card-link">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-              Visit
-            </a>
-          </div>
-          <div class="acc-card">
-            <div class="acc-card-name">Beacon Lighting</div>
-            <div class="acc-card-tag">Magento 2</div>
-            <a href="https://www.beaconlighting.com.au/" target="_blank" class="acc-card-link">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-              Visit
-            </a>
-          </div>
-          <div class="acc-card">
-            <div class="acc-card-name">Signet</div>
-            <div class="acc-card-tag">Magento 2</div>
-            <a href="https://www.signet.net.au/" target="_blank" class="acc-card-link">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-              Visit
-            </a>
-          </div>
-          <div class="acc-card">
-            <div class="acc-card-name">Barkers</div>
-            <div class="acc-card-tag">Magento 2</div>
-            <a href="https://www.barkersonline.co.nz/" target="_blank" class="acc-card-link">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-              Visit
-            </a>
-          </div>
-          <div id="acc-more">
-            <div class="acc-card">
-              <div class="acc-card-name">Sistema Plastics</div>
-              <div class="acc-card-tag">Magento 2</div>
-              <a href="https://www.sistemaplastics.com/au" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>Visit</a>
-            </div>
-            <div class="acc-card">
-              <div class="acc-card-name">Animates</div>
-              <div class="acc-card-tag">Magento 2</div>
-              <a href="https://www.animates.co.nz/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>Visit</a>
-            </div>
-            <div class="acc-card">
-              <div class="acc-card-name">Ally Fashion</div>
-              <div class="acc-card-tag">Shopify</div>
-              <a href="https://allyfashion.com/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>Visit</a>
-            </div>
-            <div class="acc-card">
-              <div class="acc-card-name">Bendon Lingerie</div>
-              <div class="acc-card-tag">Shopify</div>
-              <a href="https://www.bendonlingerie.com.au/" target="_blank" class="acc-card-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>Visit</a>
-            </div>
-          </div>
-        </div>
-        <button class="acc-toggle-btn" id="acc-btn" onclick="(function(){var m=document.getElementById('acc-more');var b=document.getElementById('acc-btn');var open=m.classList.toggle('open');b.classList.toggle('open',open);b.querySelector('.acc-toggle-label').textContent=open?'Show less':'Show 8 more projects';})()">
-          <span class="acc-toggle-icon">+</span>
-          <span class="acc-toggle-label">Show 8 more projects</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- ─── VARIANT 3: Table list ─── -->
-    <div style="margin-bottom:72px">
-      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#4f8ef7; margin-bottom:6px">Варіант 3</div>
-      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#e8eaf0; margin-bottom:4px">Table — бренд / стек / рік</div>
-      <div style="font-size:13px; color:#4a5164; margin-bottom:28px">Окрема секція "All Projects". Структуровано, по-ділових. Схоже на résumé.</div>
-
-      <style>
-        .tbl { width:100%; border-collapse:collapse; }
-        .tbl-head th {
-          font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em;
-          text-transform:uppercase; color:#4a5164; text-align:left;
-          padding:10px 20px; border-bottom:1px solid rgba(255,255,255,0.07);
-        }
-        .tbl tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background .15s; }
-        .tbl tbody tr:hover { background:rgba(255,255,255,0.03); }
-        .tbl td { padding:14px 20px; font-size:13px; vertical-align:middle; }
-        .tbl-name { color:#e8eaf0; font-weight:500; }
-        .tbl-name a { color:inherit; text-decoration:none; display:flex; align-items:center; gap:6px; }
-        .tbl-name a:hover { color:#4f8ef7; }
-        .tbl-stack span {
-          font-family:'DM Mono',monospace; font-size:10px; padding:3px 8px;
-          border-radius:4px; background:#0e1219; border:1px solid rgba(255,255,255,0.07);
-          color:#4a5164; margin-right:4px; white-space:nowrap;
-        }
-        .tbl-year { font-family:'DM Mono',monospace; font-size:11px; color:#4a5164; }
-        .tbl-role { font-size:12px; color:#4a5164; }
-      </style>
-
-      <div style="background:#0e1219; border-radius:12px; overflow:hidden;">
-        <table class="tbl">
-          <thead class="tbl-head">
-            <tr>
-              <th style="width:30%">Brand</th>
-              <th style="width:30%">Stack</th>
-              <th>Role</th>
-              <th style="width:80px; text-align:right">Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="tbl-name"><a href="https://www.blundstone.com/" target="_blank">Blundstone <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Magento 2</span><span>Hyvä</span></td>
-              <td class="tbl-role">Tech Lead · Multi-store · a11y</td>
-              <td class="tbl-year" style="text-align:right">2022</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://www.petbarn.com.au/" target="_blank">Petbarn / Greencross <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Next.js</span><span>Magento 2</span></td>
-              <td class="tbl-role">Headless migration</td>
-              <td class="tbl-year" style="text-align:right">2023</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://scotch-soda.com.au/" target="_blank">Scotch & Soda <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Shopify</span><span>Liquid</span></td>
-              <td class="tbl-role">Theme customization</td>
-              <td class="tbl-year" style="text-align:right">2024</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://shop.stihl.com.au/" target="_blank">Stihl <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Magento 2</span></td>
-              <td class="tbl-role">Frontend development</td>
-              <td class="tbl-year" style="text-align:right">2021</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://www.generatewealth.co.nz/" target="_blank">Generate Wealth <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Vue/Nuxt</span><span>Hygraph</span></td>
-              <td class="tbl-role">Headless CMS frontend</td>
-              <td class="tbl-year" style="text-align:right">2022</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://www.beaconlighting.com.au/" target="_blank">Beacon Lighting <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Magento 2</span></td>
-              <td class="tbl-role">Frontend development</td>
-              <td class="tbl-year" style="text-align:right">2021</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://ninewest.com/" target="_blank">Nine West <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>Shopify</span><span>Liquid</span></td>
-              <td class="tbl-role">Theme · UX refinement</td>
-              <td class="tbl-year" style="text-align:right">2024</td>
-            </tr>
-            <tr>
-              <td class="tbl-name"><a href="https://www.asics.com/" target="_blank">ASICS <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></td>
-              <td class="tbl-stack"><span>React</span></td>
-              <td class="tbl-role">Frontend development</td>
-              <td class="tbl-year" style="text-align:right">2023</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ─── VARIANT 4: Tag cloud with tooltip ─── -->
-    <div style="margin-bottom:40px">
-      <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#4f8ef7; margin-bottom:6px">Варіант 4</div>
-      <div style="font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:#e8eaf0; margin-bottom:4px">Tag cloud — hover tooltip</div>
-      <div style="font-size:13px; color:#4a5164; margin-bottom:28px">Всі проєкти як чіпси. Hover — спливає картка з деталями. Незвично, запам'ятовується.</div>
-
-      <style>
-        .tag-cloud-wrap { display:flex; flex-wrap:wrap; gap:10px; }
-        .tc-chip {
-          position:relative; display:inline-flex; align-items:center; gap:7px;
-          padding:8px 16px; border-radius:8px;
-          background:#0e1219; border:1px solid rgba(255,255,255,0.07);
-          font-size:13px; color:#8b91a1; cursor:default;
-          transition:color .2s, border-color .2s, background .2s;
-        }
-        .tc-chip:hover { color:#e8eaf0; border-color:rgba(79,142,247,0.35); background:#141920; }
-        .tc-chip .tc-dot {
-          width:6px; height:6px; border-radius:50%; flex-shrink:0;
-        }
-        .tc-chip .tc-tooltip {
-          position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
-          background:#1a2030; border:1px solid rgba(79,142,247,0.2);
-          border-radius:8px; padding:14px 16px; width:200px; z-index:10;
-          opacity:0; pointer-events:none; transition:opacity .2s;
-          box-shadow:0 8px 24px rgba(0,0,0,0.4);
-        }
-        .tc-chip:hover .tc-tooltip { opacity:1; }
-        .tc-tooltip-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:#e8eaf0; margin-bottom:6px; }
-        .tc-tooltip-stack { font-family:'DM Mono',monospace; font-size:10px; color:#4f8ef7; margin-bottom:6px; }
-        .tc-tooltip-link { font-size:11px; color:#4a5164; text-decoration:none; display:flex; align-items:center; gap:4px; }
-        .tc-tooltip-link:hover { color:#4f8ef7; }
-        .tc-tooltip::after {
-          content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
-          border:6px solid transparent; border-top-color:#1a2030;
-        }
-        /* color coding by stack */
-        .tc-dot.react  { background:#61dafb; }
-        .tc-dot.m2     { background:#f46f25; }
-        .tc-dot.shopify { background:#96bf48; }
-        .tc-dot.vue    { background:#42b883; }
-        .tc-legend { display:flex; gap:20px; margin-bottom:20px; }
-        .tc-legend-item { display:flex; align-items:center; gap:6px; font-family:'DM Mono',monospace; font-size:10px; color:#4a5164; letter-spacing:.06em; }
-        .tc-legend-dot { width:7px; height:7px; border-radius:50%; }
-      </style>
-
-      <div class="tc-legend">
-        <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#61dafb"></div>React/Next</div>
-        <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#f46f25"></div>Magento 2</div>
-        <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#96bf48"></div>Shopify</div>
-        <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#42b883"></div>Vue/Nuxt</div>
-      </div>
-
-      <div class="tag-cloud-wrap">
-        <div class="tc-chip">
-          <div class="tc-dot react"></div>Petbarn
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Petbarn / Greencross</div>
-            <div class="tc-tooltip-stack">Next.js · Magento 2 · GraphQL</div>
-            <a href="https://www.petbarn.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>petbarn.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Blundstone
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Blundstone</div>
-            <div class="tc-tooltip-stack">Magento 2 · Hyvä · WCAG</div>
-            <a href="https://www.blundstone.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>blundstone.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot shopify"></div>Scotch & Soda
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Scotch & Soda</div>
-            <div class="tc-tooltip-stack">Shopify · Liquid · SCSS</div>
-            <a href="https://scotch-soda.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>scotch-soda.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Opal Packaging
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Opal Packaging</div>
-            <div class="tc-tooltip-stack">Magento 2 · Tech Lead</div>
-            <a href="https://pilot.opalpackagingplus.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>opalpackagingplus.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot vue"></div>Generate Wealth
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Generate Wealth</div>
-            <div class="tc-tooltip-stack">Vue/Nuxt · Hygraph · GraphQL</div>
-            <a href="https://www.generatewealth.co.nz/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2HTML5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>generatewealth.co.nz</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot react"></div>ASICS
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">ASICS</div>
-            <div class="tc-tooltip-stack">React · Next.js</div>
-            <a href="https://www.asics.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>asics.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Stihl
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Stihl</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://shop.stihl.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>shop.stihl.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot shopify"></div>Nine West
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Nine West</div>
-            <div class="tc-tooltip-stack">Shopify · Liquid</div>
-            <a href="https://ninewest.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>ninewest.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Beacon Lighting
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Beacon Lighting</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://www.beaconlighting.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>beaconlighting.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Signet
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Signet</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://www.signet.net.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>signet.net.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot shopify"></div>Ally Fashion
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Ally Fashion</div>
-            <div class="tc-tooltip-stack">Shopify · Liquid</div>
-            <a href="https://allyfashion.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>allyfashion.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Animates
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Animates</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://www.animates.co.nz/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>animates.co.nz</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot shopify"></div>Bendon Lingerie
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Bendon Lingerie</div>
-            <div class="tc-tooltip-stack">Shopify · Liquid</div>
-            <a href="https://www.bendonlingerie.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>bendonlingerie.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>The Whisky Club
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">The Whisky Club</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://thewhiskyclub.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>thewhiskyclub.com.au</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Barkers
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Barkers</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://www.barkersonline.co.nz/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>barkersonline.co.nz</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot react"></div>RealNZ
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">RealNZ — Cardrona</div>
-            <div class="tc-tooltip-stack">React · Next.js</div>
-            <a href="https://cardrona-treblecone.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>cardrona-treblecone.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot shopify"></div>You and All Fashion
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">You and All Fashion</div>
-            <div class="tc-tooltip-stack">Shopify · Liquid</div>
-            <a href="https://youandallfashion.com/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>youandallfashion.com</a>
-          </div>
-        </div>
-        <div class="tc-chip">
-          <div class="tc-dot m2"></div>Camera Pro
-          <div class="tc-tooltip">
-            <div class="tc-tooltip-name">Camera Pro</div>
-            <div class="tc-tooltip-stack">Magento 2</div>
-            <a href="https://www.camerapro.com.au/" target="_blank" class="tc-tooltip-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>camerapro.com.au</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
 </body>
 </html>
